@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Membaca Novel</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="welcome-popup" class="popup">
+        <p>Selamat datang di Website Membaca Novel!</p>
+        <button onclick="closePopup()">Tutup</button>
+    </div>
+
+    <h1>Selamat Datang di Website Membaca Novel</h1>
+    <h2>Pilih Novel:</h2>
+    <ul id="novel-list"></ul>
+
+    <div id="novel-content" class="novel-content"></div>
+
+    <script>
+        // Daftar novel
+        const novels = [
+            'novels/novel1.txt',
+            'novels/novel2.txt',
+            'novels/novel3.txt'
+        ];
+
+        // Menampilkan daftar novel
+        const novelList = document.getElementById('novel-list');
+        novels.forEach(novel => {
+            const listItem = document.createElement('li');
+            listItem.innerHTML = `<a href="#" onclick="loadNovel('${novel}')">${novel.split('/').pop()}</a>`;
+            novelList.appendChild(listItem);
+        });
+
+        // Fungsi untuk memuat novel
+        function loadNovel(novel) {
+            fetch(novel)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    document.getElementById('novel-content').innerHTML = `<h2>${novel.split('/').pop()}</h2><pre>${data}</pre>`;
+                })
+                .catch(error => {
+                    console.error('Error loading the novel:', error);
+                });
+        }
+
+        // Pop-up selamat datang
+        function closePopup() {
+            document.getElementById('welcome-popup').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
